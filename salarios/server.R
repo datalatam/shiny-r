@@ -8,8 +8,34 @@ server <- function(input, output) {
                         n_distinct()
                 
                 valueBox(
-                        paste0(tipos),"Profesiones totales", icon = icon("list"),
-                               color = "purple"
+                        paste0(tipos),
+                        "Profesiones totales", 
+                        icon = icon("university"),
+                        color = "purple"
                 )
         })
+        
+        output$SalarioMayor <- renderValueBox({
+                salario_alto <- max(salarios$SALARIO)
+                
+                valueBox(
+                        paste0(salario_alto),
+                        "Salario mayor",
+                        icon = icon("credit-card"),
+                        color = "teal"
+                )
+        })
+        
+        output$SalarioMenor <- renderValueBox({
+                salario_bajo <- min(salarios$SALARIO)
+                
+                valueBox(
+                        paste0(salario_bajo),
+                        "Salario menor",
+                        icon = icon("credit-card"),
+                        color = ""
+                )
+        })
+        
+        
 }

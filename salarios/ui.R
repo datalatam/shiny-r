@@ -14,7 +14,12 @@ dashboardPage( skin = "red",
                         tabItem(tabName = "dashboard",
                                 fluidRow(
                                         h3("Datos"),
-                                        valueBoxOutput("Profesiones")
+                                        valueBoxOutput("Profesiones",
+                                                       width = 6),
+                                        valueBoxOutput("SalarioMayor",
+                                                       width = 6),
+                                        valueBoxOutput("SalarioMenor",
+                                                       width = 6)
                                 ))
                 )
         )
