@@ -33,7 +33,7 @@ server <- function(input, output) {
                         paste0(salario_bajo),
                         "Salario menor",
                         icon = icon("credit-card"),
-                        color = ""
+                        color = "green"
                 )
         })
         
