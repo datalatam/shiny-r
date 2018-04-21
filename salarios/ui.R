@@ -9,7 +9,9 @@ dashboardPage( skin = "red",
                             menuItem("Dashboard", tabName = "dashboard",
                                      icon = icon("columns")),
                             menuItem("Gráficos", tabName = "Graficos",
-                                     icon = icon("bar-chart-o")),
+                                     icon = icon("bar-chart-o"),
+                                     menuSubItem("Espacio completo", tabName = "completo"),
+                                     menuSubItem("Espacio dividido",tabName = "dividido")),
                             menuItem("Cuadros", tabName = "Cuadros",
                                      icon = icon("list")))
         ),
@@ -27,7 +29,7 @@ dashboardPage( skin = "red",
                                 )
                                 ),
                         
-                        tabItem(tabName = "Graficos",
+                        tabItem(tabName = "completo",
                                 fluidPage(
                                         h3("Distribuciones Salarios por Profesión"),
                                         box(plotOutput("biologos"), 
@@ -39,6 +41,13 @@ dashboardPage( skin = "red",
                                             width = 12)  
                                 )
                                 ),
+                        
+                        tabItem(tabName = "dividido",
+                                fluidPage(
+                                        h3("Distribuciones salariales"),
+                                        box(plotOutput("cantidad_profesion")),
+                                        box(plotOutput("auxiliares_enfermeria"))
+                                )),
                         
                         tabItem(tabName = "Cuadros",
                                 fluidRow(

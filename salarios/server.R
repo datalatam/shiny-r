@@ -73,6 +73,42 @@ server <- function(input, output) {
                         
         })
         
+        output$cantidad_profesion <- renderPlot({
+                
+                cantidad_por_profesion <- salarios %>% 
+                        group_by(OCUPACION) %>% 
+                        summarise(
+                                total = n()
+                        )
+                
+                ggplot(cantidad_por_profesion, aes(x = factor(OCUPACION),
+                                                   y = total,
+                                                   fill = as.factor(OCUPACION))) +
+                        geom_bar(stat = "identity") +
+                        xlab("Código ocupación") + ylab("Cantidad total") +
+                        theme_classic(base_size = 16) +
+                        theme(legend.position = "none",
+                              axis.text.x = element_text(angle = 90)) 
+                
+                        
+        }) 
+        
+        output$auxiliares_enfermeria <- renderPlot({
+                
+                auxiliares_enfermeria <- salarios %>%
+                        filter(OCUPACION.NOMBRE == "Auxiliares de enfermería")
+                
+                ggplot(auxiliares_enfermeria, aes(x = OCUPACION.NOMBRE,
+                                                  y = SALARIO)) +
+                        geom_boxplot() + 
+                        xlab("Auxiliares de enfermería") + 
+                        theme_classic(base_size = 16) +
+                        theme(axis.text.x = element_blank())
+                
+                
+        })
+                
+        
         # Cuadros profesiones
         
         output$menor_pagagas <- DT::renderDataTable({
