@@ -45,7 +45,8 @@ dashboardPage( skin = "red",
                                         h3("Profesiones por segmentos de salarios"),
                                         box(title = "Profesiones menor pagadas",
                                             solidHeader = TRUE,
-                                            DT::dataTableOutput("menor_pagadas"))
+                                            DT::dataTableOutput("menor_pagagas"),
+                                            width = 12)
                                 ))
                 )
         )

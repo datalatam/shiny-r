@@ -76,16 +76,16 @@ server <- function(input, output) {
         # Cuadros profesiones
         
         output$menor_pagagas <- DT::renderDataTable({
-                promedios_menores <- salarios %>% 
-                        group_by(OCUPACION) %>% 
+                DT::datatable(salarios %>% 
+                        group_by(OCUPACION.NOMBRE) %>% 
                         summarise(
-                                promedio <- mean(SALARIO) 
+                                promedio = mean(SALARIO) 
                         ) %>% 
-                        arrange() %>% 
+                        arrange(promedio) %>%
                         slice(1:20)
+                )
                 
                 
-                DT::datatable(promedios_menores)
         })
         
         
