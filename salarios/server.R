@@ -44,18 +44,19 @@ server <- function(input, output) {
         output$biologos <- renderPlot({
                 
                 biologos <- salarios %>% 
-                        filter(OCUPACION == "2211")
+                        filter(OCUPACION == "2211") 
                 
-                ggplot(biologos, aes(x = factor(OCUPACION),y = SALARIO,
+                ggplot(biologos, aes(x = OCUPACION,y = SALARIO,
                                      fill = OCUPACION)) +
-                        geom_violin(aes(fill = factor(OCUPACION))) +
+                        geom_violin(aes(fill = OCUPACION)) +
                         geom_jitter(alpha = 0.8) +
                         xlab("Biólogos, citólogos, genetistas") +
                         theme_classic(base_size = 16) +
-                        theme(legend.position = "none",axis.ticks = element_blank())
+                        theme(legend.position = "none",
+                              axis.text.x = element_blank())
         })
         
-        output$salarios %>% renderPlot({
+        output$salarios_totales <-  renderPlot({
                 promedios <- salarios %>% 
                         group_by(OCUPACION) %>% 
                         summarise(
@@ -80,10 +81,11 @@ server <- function(input, output) {
                         summarise(
                                 promedio <- mean(SALARIO) 
                         ) %>% 
-                        arrange()
+                        arrange() %>% 
+                        slice(1:20)
                 
                 
-                DT::datatable()
+                DT::datatable(promedios_menores)
         })
         
         

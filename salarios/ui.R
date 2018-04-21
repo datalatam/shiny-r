@@ -26,13 +26,20 @@ dashboardPage( skin = "red",
                                                        width = 6)
                                 )
                                 ),
+                        
                         tabItem(tabName = "Graficos",
                                 fluidPage(
                                         h3("Distribuciones Salarios por Profesión"),
-                                        box(plotOutput("biologos")),
-                                        box(plotOutput("salarios"))
+                                        box(plotOutput("biologos"), 
+                                            width = 12)
+                                ),
+                                fluidPage(
+                                        box(title = "Promedio salarios por profesión",
+                                            plotOutput("salarios_totales"), 
+                                            width = 12)  
                                 )
                                 ),
+                        
                         tabItem(tabName = "Cuadros",
                                 fluidRow(
                                         h3("Profesiones por segmentos de salarios"),
