@@ -2,6 +2,8 @@
 salarios <- read_csv("datos/ccss_salarios.csv")
 
 server <- function(input, output) {
+        
+        # Cuadros color resumen
         output$Profesiones <- renderValueBox({
                 tipos <- salarios %>%
                         group_by(OCUPACION, OCUPACION.NOMBRE) %>%
@@ -35,6 +37,53 @@ server <- function(input, output) {
                         icon = icon("credit-card"),
                         color = "green"
                 )
+        })
+        
+        # Figuras distribución salarios
+        
+        output$biologos <- renderPlot({
+                
+                biologos <- salarios %>% 
+                        filter(OCUPACION == "2211")
+                
+                ggplot(biologos, aes(x = factor(OCUPACION),y = SALARIO,
+                                     fill = OCUPACION)) +
+                        geom_violin(aes(fill = factor(OCUPACION))) +
+                        geom_jitter(alpha = 0.8) +
+                        xlab("Biólogos, citólogos, genetistas") +
+                        theme_classic(base_size = 16) +
+                        theme(legend.position = "none",axis.ticks = element_blank())
+        })
+        
+        output$salarios %>% renderPlot({
+                promedios <- salarios %>% 
+                        group_by(OCUPACION) %>% 
+                        summarise(
+                                prom = mean(SALARIO)
+                        )
+                
+                ggplot(promedios, aes(x = factor(OCUPACION), y = prom,
+                                      fill = as.factor(OCUPACION))) +
+                        geom_bar(stat = "identity") +
+                        xlab("Código ocupación") + ylab("Promedio salario") +
+                        theme_classic(base_size = 16) +
+                        theme(legend.position = "none",
+                              axis.text.x = element_text(angle = 90))
+                        
+        })
+        
+        # Cuadros profesiones
+        
+        output$menor_pagagas <- DT::renderDataTable({
+                promedios_menores <- salarios %>% 
+                        group_by(OCUPACION) %>% 
+                        summarise(
+                                promedio <- mean(SALARIO) 
+                        ) %>% 
+                        arrange()
+                
+                
+                DT::datatable()
         })
         
         
