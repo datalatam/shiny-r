@@ -1,6 +1,8 @@
 library(shinydashboard)
 library(dplyr)
 library(readr)
+library(ggplot2)
+library(lucr)
 
 dashboardPage(
         skin = "red",

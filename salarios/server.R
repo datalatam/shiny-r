@@ -18,7 +18,10 @@ server <- function(input, output) {
         })
         
         output$SalarioMayor <- renderValueBox({
-                salario_alto <- max(salarios$SALARIO)
+                salario_alto <- max(salarios$SALARIO) %>% 
+                  to_currency(currency_symbol = " ", symbol_first = TRUE,
+                              group_size = 3, group_delim = " ", 
+                              decimal_size = 2, decimal_delim = ".")
                 
                 valueBox(
                         paste0(salario_alto),
@@ -29,7 +32,13 @@ server <- function(input, output) {
         })
         
         output$SalarioMenor <- renderValueBox({
-                salario_bajo <- min(salarios$SALARIO)
+                salario_bajo <- salarios %>% 
+                  filter(SALARIO > 100000) 
+                  
+                salario_bajo <- min(salario_bajo$SALARIO) %>% 
+                  to_currency(currency_symbol = " ", symbol_first = TRUE,
+                              group_size = 3, group_delim = " ",
+                              decimal_size = 2, decimal_delim = ".")
                 
                 valueBox(
                         paste0(salario_bajo),
