@@ -48,8 +48,7 @@ server <- function(input, output) {
           )
   })
         
-  # Figuras distribución salarios
-        
+  # Figuras distribución salarios 4 profesiones mejor pagadas
  output$salarios_mayores <- renderPlot({
    salarios_mayores <- salarios %>%
      group_by(OCUPACION.NOMBRE) %>%
@@ -76,6 +75,8 @@ server <- function(input, output) {
                 axis.text.x = element_text(angle = 90))
     
     })
+ 
+ # 
   
   output$salarios_totales <-  renderPlot({
     promedios <- salarios %>%
@@ -93,7 +94,8 @@ server <- function(input, output) {
             axis.text.x = element_text(angle = 90))
       
     })
-        
+  
+  # Plot cantidad de personas por profesión
   output$cantidad_profesion <- renderPlot({
     cantidad_por_profesion <- salarios %>%
       group_by(OCUPACION) %>%
@@ -110,12 +112,12 @@ server <- function(input, output) {
     
     })
   
+  # Plot distribución salario auxiliares enfermería
   output$auxiliares_enfermeria <- renderPlot({
     auxiliares_enfermeria <- salarios %>%
       filter(OCUPACION.NOMBRE == "Auxiliares de enfermería")
     
-    ggplot(auxiliares_enfermeria, aes(x = OCUPACION.NOMBRE,
-                                      y = SALARIO)) +
+    ggplot(auxiliares_enfermeria, aes(x = OCUPACION.NOMBRE, y = SALARIO)) +
       geom_boxplot() +
       xlab("Auxiliares de enfermería") +
       theme_classic(base_size = 16) +
@@ -124,10 +126,9 @@ server <- function(input, output) {
     })
           
   
-  # Cuadros profesiones
-  
+  # Cuadros profesiones peor pagadas
   output$menor_pagagas <- DT::renderDataTable({
-    DT::datatable(salarios %>%
+    cuadro_menor_pagadas <- DT::datatable(salarios %>%
                     group_by(OCUPACION.NOMBRE) %>%
                     summarise(
                       promedio = mean(SALARIO)
@@ -135,6 +136,9 @@ server <- function(input, output) {
                     arrange(promedio) %>%
                     slice(1:20)
                   )
+    
+      formatCurrency(cuadro_menor_pagadas, columns = "promedio", currency = "₡", 
+                     interval = 3, mark = " ", digits = 2)
     })
   
         
