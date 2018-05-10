@@ -38,7 +38,7 @@ dashboardPage(
                 tabItem(tabName = "completo",
                         fluidPage(
                                 h3("Distribuciones Salarios por Profesión"),
-                                box(plotOutput("biologos"),
+                                box(plotOutput("salarios_mayores"),
                                     width = 12)
                         ),
                         fluidPage(

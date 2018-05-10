@@ -32,8 +32,8 @@ server <- function(input, output) {
         })
         
         output$SalarioMenor <- renderValueBox({
-                salario_bajo <- salarios %>% 
-                  filter(SALARIO > 100000) 
+          salario_bajo <- salarios %>%
+            filter(SALARIO > 100000) 
                   
                 salario_bajo <- min(salario_bajo$SALARIO) %>% 
                   to_currency(currency_symbol = " ", symbol_first = TRUE,
@@ -50,19 +50,30 @@ server <- function(input, output) {
         
         # Figuras distribución salarios
         
-        output$biologos <- renderPlot({
-                
-                biologos <- salarios %>% 
-                        filter(OCUPACION == "2211") 
-                
-                ggplot(biologos, aes(x = OCUPACION,y = SALARIO,
-                                     fill = OCUPACION)) +
-                        geom_violin(aes(fill = OCUPACION)) +
-                        geom_jitter(alpha = 0.8) +
-                        xlab("Biólogos, citólogos, genetistas") +
-                        theme_classic(base_size = 16) +
-                        theme(legend.position = "none",
-                              axis.text.x = element_blank())
+  output$salarios_mayores <- renderPlot({
+    salarios_mayores <- salarios %>%
+      group_by(OCUPACION.NOMBRE) %>% 
+      summarise(
+        promedio = mean(SALARIO)
+      ) %>% 
+      arrange(desc(promedio)) %>%
+      slice(1:4)
+    
+    salarios_mayores_completos <- semi_join(salarios, salarios_mayores,
+                                            by = "OCUPACION.NOMBRE")
+    
+    salarios_mayores_completos$OCUPACION.NOMBRE[salarios_mayores_completos$OCUPACION.NOMBRE == "Gerentes y subgerentes generales, directores y subdirectores generales y coordinadores generales de instituciones públicas y de empresas privadas"] <- "Directores/Gerentes"
+    salarios_mayores_completos$OCUPACION.NOMBRE[salarios_mayores_completos$OCUPACION.NOMBRE == "Personal de nivel directivo de la administración pública"] <- "Administrativos"
+    
+
+    ggplot(salarios_mayores_completos, aes(x = OCUPACION.NOMBRE, y = SALARIO,
+                       color = OCUPACION.NOMBRE)) +
+          geom_boxplot() +
+          geom_jitter(alpha = 0.2) +
+          xlab("Profesión") +
+          theme_classic(base_size = 12) +
+          theme(legend.position = "none",
+                axis.text.x = element_text(angle = 90))
         })
         
         output$salarios_totales <-  renderPlot({
