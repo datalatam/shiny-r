@@ -48,6 +48,7 @@ dashboardPage(
               box(plotOutput("salarios_mayores"),
                   width = 12)
               ),
+            
             fluidPage(
               box(
                 title = "Promedio salarios por profesión",

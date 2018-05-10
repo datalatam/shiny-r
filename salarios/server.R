@@ -117,11 +117,13 @@ server <- function(input, output) {
     auxiliares_enfermeria <- salarios %>%
       filter(OCUPACION.NOMBRE == "Auxiliares de enfermería")
     
-    ggplot(auxiliares_enfermeria, aes(x = OCUPACION.NOMBRE, y = SALARIO)) +
+    ggplot(auxiliares_enfermeria, aes(x = OCUPACION.NOMBRE, y = SALARIO,
+                                      color = OCUPACION.NOMBRE)) +
       geom_boxplot() +
+      geom_jitter(alpha = 0.1) +
       xlab("Auxiliares de enfermería") +
       theme_classic(base_size = 16) +
-      theme(axis.text.x = element_blank())
+      theme(legend.position = "none",axis.text.x = element_blank())
     
     })
           
