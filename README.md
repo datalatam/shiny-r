@@ -11,7 +11,7 @@ R.Version()$version.string
 
 La respuesta debería ser por lo menos (puede ser una versión más reciente):
 
-[1] "R version 3.4.3 (2017-11-30)"
+   [1] "R version 3.4.3 (2017-11-30)"
 
 Si necesitas actualizar por favor visita la página correspondiente de r-project.org:
 
@@ -25,8 +25,7 @@ https://www.rstudio.com/products/rstudio/download/#download
 ## Que tienes los paquetes necesarios
 Para que estés segur@ de tener todos los paquetes que vamos a utilizar lo mejor es que los instales de antemano. Con las siguientes instrucciones los puedes instalar todos:
 
-install.packages(c("devtools", "tidyverse", "shiny", "shinydashboard",
-"miniUI"), dependencies = TRUE)
+   install.packages(c("devtools", "tidyverse", "shiny", "shinydashboard", "miniUI"), dependencies = TRUE)
 
 ## Organiza
 Este evento lo organiza [Data Latam](http://wwww.datalatam.com) en cooperación con [ixpantia](https://www.ixpantia.com). Data Latam es una comunidad Latinoamericana de profesionales y académicos aplicando ciencia de datos en su día a día en la industria de datos en Latino América. En sus eventos, cursos y programas de extensión exploramos tecnologías, aprendemos sobre ciencia de datos, hablamos de tendencias y eventos relevantes de la industria, y compartimos novedades del sector.
