@@ -3,33 +3,33 @@ salarios <- read_csv("datos/ccss_salarios.csv")
 
 server <- function(input, output) {
         
-        # Cuadros color resumen
-        output$Profesiones <- renderValueBox({
-                tipos <- salarios %>%
-                        group_by(OCUPACION, OCUPACION.NOMBRE) %>%
-                        n_distinct()
-                
-                valueBox(
-                        paste0(tipos),
-                        "Profesiones totales", 
-                        icon = icon("university"),
-                        color = "purple"
-                )
-        })
-        
-        output$SalarioMayor <- renderValueBox({
-                salario_alto <- max(salarios$SALARIO) %>% 
-                  to_currency(currency_symbol = " ", symbol_first = TRUE,
-                              group_size = 3, group_delim = " ", 
-                              decimal_size = 2, decimal_delim = ".")
-                
-                valueBox(
-                        paste0(salario_alto),
-                        "Salario mayor",
-                        icon = icon("credit-card"),
-                        color = "teal"
-                )
-        })
+  # Cuadros color resumen
+  output$Profesiones <- renderValueBox({
+    tipos <- salarios %>%
+            group_by(OCUPACION, OCUPACION.NOMBRE) %>%
+            n_distinct()
+    
+    valueBox(
+            paste0(tipos),
+            "Profesiones totales", 
+            icon = icon("university"),
+            color = "purple"
+    )
+  })
+  
+  output$SalarioMayor <- renderValueBox({
+    salario_alto <- max(salarios$SALARIO) %>% 
+      to_currency(currency_symbol = " ", symbol_first = TRUE,
+                  group_size = 3, group_delim = " ", 
+                  decimal_size = 2, decimal_delim = ".")
+    
+    valueBox(
+            paste0(salario_alto),
+            "Salario mayor",
+            icon = icon("credit-card"),
+            color = "teal"
+    )
+  })
         
   output$SalarioMenor <- renderValueBox({
     salario_bajo <- salarios %>%
@@ -49,22 +49,30 @@ server <- function(input, output) {
   })
         
   # Figuras distribución salarios 4 profesiones mejor pagadas
- output$salarios_mayores <- renderPlot({
+  output$salarios_mayores <- renderPlot({
    salarios_mayores <- salarios %>%
      group_by(OCUPACION.NOMBRE) %>%
      summarise(
        promedio = mean(SALARIO)
        ) %>%
      arrange(desc(promedio)) %>%
-     slice(1:4)
-    
-    salarios_mayores_completos <- semi_join(salarios, salarios_mayores,
-                                            by = "OCUPACION.NOMBRE")
-    
-    salarios_mayores_completos$OCUPACION.NOMBRE[salarios_mayores_completos$OCUPACION.NOMBRE == "Gerentes y subgerentes generales, directores y subdirectores generales y coordinadores generales de instituciones públicas y de empresas privadas"] <- "Directores/Gerentes"
-    salarios_mayores_completos$OCUPACION.NOMBRE[salarios_mayores_completos$OCUPACION.NOMBRE == "Personal de nivel directivo de la administración pública"] <- "Administrativos"
-    
-
+     head(4)
+       
+      
+  salarios_mayores_completos <- semi_join(salarios, salarios_mayores,
+                                          by = "OCUPACION.NOMBRE")
+  
+  # "Gerentes y subgerentes generales, directores y subdirectores generales y coordinadores generales de instituciones públicas y de empresas privadas"
+  # "Personal de nivel directivo de la administración pública"
+  
+  salarios_mayores_completos <- salarios_mayores_completos %>%
+    mutate(OCUPACION.NOMBRE = replace(OCUPACION.NOMBRE,
+      str_detect(OCUPACION.NOMBRE, "Gerentes y subgerentes generales"),
+      "Directores/Gerentes")) %>% 
+    mutate(OCUPACION.NOMBRE = replace(OCUPACION.NOMBRE,
+      str_detect(OCUPACION.NOMBRE, "Personal de nivel"),
+      "Administrativos"))
+ 
     ggplot(salarios_mayores_completos, aes(x = OCUPACION.NOMBRE, y = SALARIO,
                        color = OCUPACION.NOMBRE)) +
           geom_boxplot() +
@@ -76,14 +84,10 @@ server <- function(input, output) {
     
     })
  
- # 
-  
   output$salarios_totales <-  renderPlot({
     promedios <- salarios %>%
       group_by(OCUPACION) %>%
-      summarise(
-        prom = mean(SALARIO)
-        )
+      summarise(prom = mean(SALARIO))
     
     ggplot(promedios, aes(x = factor(OCUPACION), y = prom,
                           fill = as.factor(OCUPACION))) +
@@ -99,12 +103,11 @@ server <- function(input, output) {
   output$cantidad_profesion <- renderPlot({
     cantidad_por_profesion <- salarios %>%
       group_by(OCUPACION) %>%
-      summarise(
-        total = n()
-        )
+      summarise(total = n())
     
     ggplot(cantidad_por_profesion, aes(x = factor(OCUPACION),
-                                       y = total, fill = as.factor(OCUPACION))) +
+                                       y = total,
+                                       fill = as.factor(OCUPACION))) +
       geom_bar(stat = "identity") +
       xlab("Código ocupación") + ylab("Cantidad total") +
       theme_classic(base_size = 16) +
@@ -132,16 +135,13 @@ server <- function(input, output) {
   output$menor_pagagas <- DT::renderDataTable({
     cuadro_menor_pagadas <- DT::datatable(salarios %>%
                     group_by(OCUPACION.NOMBRE) %>%
-                    summarise(
-                      promedio = mean(SALARIO)
-                      ) %>%
+                    summarise(promedio = mean(SALARIO)) %>%
                     arrange(promedio) %>%
-                    slice(1:20)
+                    head(20)
                   )
     
       formatCurrency(cuadro_menor_pagadas, columns = "promedio", currency = "₡", 
                      interval = 3, mark = " ", digits = 2)
     })
   
-        
 }

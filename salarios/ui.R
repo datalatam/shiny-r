@@ -3,6 +3,8 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 library(lucr)
+library(DT)
+library(stringr)
 
 dashboardPage(
   skin = "red",
@@ -53,27 +55,33 @@ dashboardPage(
               box(
                 title = "Promedio salarios por profesión",
                 plotOutput("salarios_totales"),
-                width = 12
-                )
+                width = 12)
               )),
     
     
     tabItem(tabName = "dividido",
             fluidPage(
+              fluidRow(
               h3("Distribuciones salariales"),
-              box(plotOutput("cantidad_profesion")),
-              box(plotOutput("auxiliares_enfermeria"))
-              )),
+              box(
+                title = "Cantidad de empleados por profesión",
+                status = "primary",
+                plotOutput("cantidad_profesion")),
+              box(
+                title = "Salario de auxiliares enfermería",
+                status = "warning",
+                plotOutput("auxiliares_enfermeria"))
+              ))),
     
     tabItem(tabName = "Cuadros",
             fluidRow(
-              h3("Profesiones por segmentos de salarios"),
+              #h3("Profesiones por segmentos de salarios"),
               box(
-                title = "Profesiones menor pagadas",
+                title = "Las 20 Profesiones menor pagadas",
+                status = "primary",
                 solidHeader = TRUE,
                 DT::dataTableOutput("menor_pagagas"),
-                width = 12
-                )
+                width = 12)
               ))
     ))
 )
