@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(babynames)
+library(ggplot2)
 
 babynames <- babynames::babynames %>%
   filter(n > 500) %>%

@@ -1,7 +1,7 @@
 library(shiny)
 
 ui <- fluidPage(
-  numericInput(inputId = "n", 
+  numericInput(inputId = "n",
                "Tamaño muestra", value = 25),
   plotOutput(outputId = "hist")
 )
@@ -11,3 +11,4 @@ server <- function(input, output) {
     hist(rnorm(input$n))
   })
 }
+shinyApp(ui = ui, server = server)
