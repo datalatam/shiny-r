@@ -6,7 +6,7 @@ library(babynames)
 ui <- fluidPage(
 
    # Application title
-   titlePanel("Cual problema tenemos aqui?"),
+   titlePanel("¿Cuál problema tenemos aqui?"),
 
    # Representa la seleccion que generamos en server()
    sidebarLayout(
